@@ -1,0 +1,16 @@
+# Standard ignore list
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE specific
+.vscode/
+.idea/
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Local env files
+.env
+.env.local
