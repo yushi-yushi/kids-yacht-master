@@ -60,6 +60,78 @@ const star = {
 const input = { left: false, right: false, sailActive: false, sailRelease: false };
 
 /**
+ * タイマー・ランキング機能
+ */
+let timerActive = false;
+let timeLeft = 60;
+let countdownInterval = null;
+let highScores = JSON.parse(localStorage.getItem('kidsYachtHiScores')) || [0, 0, 0];
+
+const timerDisplay = document.getElementById('time-left');
+const startTimerBtn = document.getElementById('btn-start-timer');
+const rankingList = document.getElementById('ranking-list');
+const resetScoresBtn = document.getElementById('btn-reset-scores');
+
+function updateRankingUI() {
+    rankingList.innerHTML = highScores
+        .map((s, i) => `<li><span>${i + 1}位</span> <span>${s}点</span></li>`)
+        .join('');
+}
+
+function startTimer() {
+    if (timerActive) return;
+
+    score = 0;
+    document.getElementById('score').innerText = score;
+    timerActive = true;
+    timeLeft = 60;
+    timerDisplay.innerText = timeLeft;
+    startTimerBtn.innerText = "チャレンジ中...";
+    startTimerBtn.disabled = true;
+    startTimerBtn.style.opacity = "0.5";
+
+    countdownInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+            endTimer();
+        }
+    }, 1000);
+}
+
+function endTimer() {
+    clearInterval(countdownInterval);
+    timerActive = false;
+    startTimerBtn.innerText = "チャレンジ開始！";
+    startTimerBtn.disabled = false;
+    startTimerBtn.style.opacity = "1";
+
+    // ランキング更新
+    highScores.push(score);
+    highScores.sort((a, b) => b - a);
+    highScores = highScores.slice(0, 3);
+    localStorage.setItem('kidsYachtHiScores', JSON.stringify(highScores));
+    updateRankingUI();
+
+    alert(`タイムアップ！ スコアは ${score}点 でした！`);
+}
+
+function resetScores() {
+    if (confirm('すべての記録をリセットしますか？')) {
+        highScores = [0, 0, 0];
+        localStorage.setItem('kidsYachtHiScores', JSON.stringify(highScores));
+        updateRankingUI();
+        score = 0;
+        document.getElementById('score').innerText = score;
+    }
+}
+
+startTimerBtn.addEventListener('click', startTimer);
+resetScoresBtn.addEventListener('click', resetScores);
+updateRankingUI();
+
+/**
  * 旋回ロジック（タック・ジャイブ）
  */
 function startSpecialMove(type) {

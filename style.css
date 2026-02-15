@@ -17,36 +17,161 @@ body {
 /* スコアや速度などの情報を表示するエリア */
 #ui {
     position: absolute;
-    top: 10px;
+    top: 5px;
     left: 10px;
     color: white;
     text-shadow: 1px 1px 2px #000;
     pointer-events: none;
     z-index: 10;
+    max-width: 180px;
 }
+
+/* Enable pointer events only for interactive items in UI if needed,
+   but we'll make child containers auto where needed. */
+#ui h1 {
+    pointer-events: none;
+}
+
+#ui .stats-grid {
+    pointer-events: none;
+}
+
+#ui #msg {
+    pointer-events: auto;
+}
+
 
 h1 {
     margin: 0;
-    font-size: 18px;
+    font-size: 14px;
     color: #FFD700;
+    white-space: nowrap;
 }
 
 p {
-    margin: 4px 0;
+    margin: 2px 0;
+    font-size: 12px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px 15px;
+    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+}
+
+#timer-container {
+    position: absolute;
+    top: 90px;
+    right: 10px;
+    width: 140px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+    z-index: 25;
+    pointer-events: auto;
+}
+
+#timer-display {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #FFD700;
+}
+
+.game-btn {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #333;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background 0.2s;
+    width: 100%;
+}
+
+.game-btn:active {
+    transform: scale(0.95);
+}
+
+#ranking-container {
+    position: absolute;
+    top: 210px;
+    right: 10px;
+    width: 140px;
+    background: rgba(0, 0, 128, 0.3);
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 25;
+    pointer-events: auto;
+}
+
+#ranking-container h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    text-align: center;
+    color: #FFD700;
+}
+
+#ranking-list {
+    margin: 0;
+    padding: 0 0 0 25px;
     font-size: 14px;
 }
 
+#ranking-list li {
+    margin-bottom: 6px;
+    font-weight: bold;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 2px;
+}
+
+#ranking-list li::before {
+    content: "⚓ ";
+}
+
+.reset-btn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reset-btn:hover {
+    color: white;
+    border-color: white;
+}
+
 #msg {
-    margin-top: 15px;
-    padding: 10px 15px;
+    margin-top: 10px;
+    padding: 8px 12px;
     background: rgba(255, 99, 71, 0.2);
     border-left: 5px solid #FF6347;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: #FF6347;
     animation: pulse 2s infinite ease-in-out;
-    min-height: 24px;
+    min-height: 20px;
     display: flex;
     align-items: center;
 }
@@ -104,8 +229,8 @@ p {
 /* セール状態ゲージ */
 #sail-gauge-container {
     position: absolute;
-    right: 20px;
-    top: 50%;
+    right: 15px;
+    top: 70%;
     transform: translateY(-50%);
     width: 30px;
     height: 150px;
@@ -288,4 +413,121 @@ p {
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
     z-index: 90;
+}
+
+/* スマホ向けメディアクエリ */
+@media screen and (max-width: 600px) {
+    #ui {
+        max-width: 150px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 2px;
+        padding: 4px;
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    #wind-container {
+        top: 5px;
+        right: 5px;
+    }
+
+    #wind-indicator {
+        width: 40px;
+        height: 40px;
+    }
+
+    #arrow {
+        font-size: 20px;
+    }
+
+    #timer-container {
+        top: 60px;
+        right: 5px;
+        width: 100px;
+        padding: 6px;
+    }
+
+    #timer-display {
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+
+    .game-btn {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+
+    #ranking-container {
+        top: 130px;
+        right: 5px;
+        width: 100px;
+        padding: 6px;
+        background: rgba(0, 0, 128, 0.5);
+    }
+
+    #ranking-container h3 {
+        font-size: 10px;
+        margin-bottom: 4px;
+    }
+
+    #ranking-list {
+        font-size: 9px;
+        padding-left: 15px;
+    }
+
+    #ranking-list li {
+        margin-bottom: 2px;
+    }
+
+    .reset-btn {
+        font-size: 7px;
+        padding: 2px 4px;
+        margin-top: 4px;
+    }
+
+    #btn-help {
+        bottom: 240px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    #controls {
+        bottom: 20px;
+        padding: 0 15px;
+    }
+
+    .btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+
+    .btn-small {
+        width: 65px;
+        height: 35px;
+        font-size: 10px;
+    }
+
+    #btn-sail {
+        width: 70px;
+        height: 60px;
+        font-size: 11px;
+    }
+
+    #btn-release {
+        width: 70px;
+        height: 35px;
+        font-size: 9px;
+    }
+
+    #sail-gauge-container {
+        right: 10px;
+        top: 65%;
+        height: 100px;
+        width: 20px;
+    }
 }
