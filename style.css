@@ -1,0 +1,262 @@
+/* 基本レイアウトの設定 */
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #87CEEB;
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#gameCanvas {
+    display: block;
+    background-color: #1E90FF;
+}
+
+/* スコアや速度などの情報を表示するエリア */
+#ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    text-shadow: 1px 1px 2px #000;
+    pointer-events: none;
+    z-index: 10;
+}
+
+h1 {
+    margin: 0;
+    font-size: 18px;
+    color: #FFD700;
+}
+
+p {
+    margin: 2px 0;
+    font-size: 14px;
+}
+
+/* 風向きインジケーターの設定 */
+#wind-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#wind-indicator {
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+#arrow {
+    font-size: 30px;
+    font-weight: bold;
+    color: #FFD700;
+    transition: transform 0.1s;
+}
+
+.label {
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+/* セール状態ゲージ */
+#sail-gauge-container {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 150px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid white;
+    border-radius: 15px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 10;
+}
+
+#sail-gauge-fill {
+    width: 100%;
+    height: 0%;
+    background: #FF6347;
+    border-radius: 10px;
+}
+
+#sail-gauge-label {
+    position: absolute;
+    top: -25px;
+    color: white;
+    font-size: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+/* 下部の操作ボタンエリア */
+#controls {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    box-sizing: border-box;
+    z-index: 20;
+}
+
+.btn {
+    width: 75px;
+    height: 75px;
+    background: rgba(255, 255, 255, 0.4);
+    border: 3px solid white;
+    border-radius: 50%;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.btn:active,
+.btn.pressed {
+    background: rgba(255, 215, 0, 0.8);
+    transform: scale(0.9);
+}
+
+/* タック・ジャイブボタンのスタイル（サイズを大きく調整） */
+.special-btns {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.btn-small {
+    width: 85px;
+    /* 65pxから拡大 */
+    height: 45px;
+    /* 40pxから拡大 */
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 12px;
+    background: rgba(30, 144, 255, 0.6);
+}
+
+/* セール操作用ボタン */
+.sail-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+#btn-sail {
+    width: 90px;
+    height: 70px;
+    background: rgba(255, 69, 0, 0.7);
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 35px;
+    flex-direction: column;
+    text-align: center;
+}
+
+#btn-sail.active {
+    background: #FFD700;
+    color: #333;
+}
+
+#btn-release {
+    width: 90px;
+    height: 45px;
+    background: rgba(100, 100, 100, 0.7);
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 20px;
+    text-align: center;
+}
+
+/* ヘルプボタン */
+#btn-help {
+    position: absolute;
+    bottom: 220px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 25;
+}
+
+/* ヘルプ表示用のモーダル */
+#help-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    color: #333;
+}
+
+#help-modal h2 {
+    margin-top: 0;
+    color: #1E90FF;
+    text-align: center;
+}
+
+#help-modal ul {
+    padding-left: 20px;
+}
+
+#help-modal li {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+#close-help {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 30px;
+    background: #1E90FF;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 90;
+}

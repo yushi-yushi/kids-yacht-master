@@ -1,0 +1,338 @@
+/**
+ * システム管理・初期化
+ */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+/**
+ * ヘルプ画面制御
+ */
+const helpBtn = document.getElementById('btn-help');
+const helpModal = document.getElementById('help-modal');
+const helpOverlay = document.getElementById('overlay');
+const closeHelp = document.getElementById('close-help');
+
+const toggleHelp = (show) => {
+    const display = show ? 'block' : 'none';
+    helpModal.style.display = display;
+    helpOverlay.style.display = display;
+};
+
+helpBtn.addEventListener('click', () => toggleHelp(true));
+helpBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleHelp(true); });
+closeHelp.addEventListener('click', () => toggleHelp(false));
+helpOverlay.addEventListener('click', () => toggleHelp(false));
+
+/**
+ * ゲーム状態
+ */
+let score = 0;
+const boat = {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+    angle: -Math.PI / 2,
+    speed: 0,
+    maxSpeed: 6,
+    rotationSpeed: 0.05,
+    sailTightness: 0, // 0 to 1
+    autoRotateDir: 0,
+    autoRotateTarget: null
+};
+
+const windAngle = Math.PI / 2; // 北風（上から下）
+
+const star = {
+    x: Math.random() * (window.innerWidth - 100) + 50,
+    y: Math.random() * (window.innerHeight - 100) + 50,
+    size: 18
+};
+
+const input = { left: false, right: false, sailActive: false, sailRelease: false };
+
+/**
+ * 旋回ロジック（タック・ジャイブ）
+ */
+function startSpecialMove(type) {
+    // 現在の風に対する角度を確認
+    let diff = Math.atan2(Math.sin(boat.angle - windAngle), Math.cos(boat.angle - windAngle));
+
+    if (type === 'tack') {
+        // タック：風上を回る
+        boat.autoRotateDir = (diff < 0) ? 1 : -1;
+        boat.autoRotateTarget = boat.angle + boat.autoRotateDir * Math.PI * 0.5;
+    } else if (type === 'gybe') {
+        // ジャイブ：風下を回る
+        boat.autoRotateDir = (diff < 0) ? -1 : 1;
+        boat.autoRotateTarget = boat.angle + boat.autoRotateDir * Math.PI * 0.5;
+    }
+}
+
+/**
+ * 入力イベント処理
+ */
+// キーボード
+window.addEventListener('keydown', (e) => {
+    const key = e.code;
+    if (key === 'ArrowLeft') { input.left = true; boat.autoRotateDir = 0; }
+    if (key === 'ArrowRight') { input.right = true; boat.autoRotateDir = 0; }
+    if (key === 'Space' || key === 'ArrowUp') { input.sailActive = true; input.sailRelease = false; }
+    if (key === 'ArrowDown') { input.sailRelease = true; input.sailActive = false; }
+
+    // 特殊操船ショートカット
+    if (key === 'KeyT') startSpecialMove('tack');
+    if (key === 'KeyJ') startSpecialMove('gybe');
+});
+
+window.addEventListener('keyup', (e) => {
+    const key = e.code;
+    if (e.code === 'ArrowLeft') input.left = false;
+    if (e.code === 'ArrowRight') input.right = false;
+    if (key === 'Space' || key === 'ArrowUp') input.sailActive = false;
+    if (key === 'ArrowDown') input.sailRelease = false;
+});
+
+// ボタンUI
+function setupDirBtn(id, key) {
+    const btn = document.getElementById(id);
+    const start = (e) => {
+        e.preventDefault();
+        input[key] = true;
+        btn.classList.add('pressed');
+        boat.autoRotateDir = 0;
+    };
+    const end = (e) => {
+        e.preventDefault();
+        input[key] = false;
+        btn.classList.remove('pressed');
+    };
+    btn.addEventListener('touchstart', start, { passive: false });
+    btn.addEventListener('touchend', end, { passive: false });
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('mouseup', end);
+    btn.addEventListener('mouseleave', end);
+}
+setupDirBtn('btn-left', 'left');
+setupDirBtn('btn-right', 'right');
+
+const sailBtn = document.getElementById('btn-sail');
+const releaseBtn = document.getElementById('btn-release');
+const tackBtn = document.getElementById('btn-tack');
+const gybeBtn = document.getElementById('btn-gybe');
+
+function setupHoldBtn(id, key) {
+    const btn = document.getElementById(id);
+    const start = (e) => {
+        e.preventDefault();
+        input[key] = true;
+        btn.classList.add('pressed');
+    };
+    const end = (e) => {
+        e.preventDefault();
+        input[key] = false;
+        btn.classList.remove('pressed');
+    };
+    btn.addEventListener('touchstart', start, { passive: false });
+    btn.addEventListener('touchend', end, { passive: false });
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('mouseup', end);
+    btn.addEventListener('mouseleave', end);
+}
+
+setupHoldBtn('btn-sail', 'sailActive');
+setupHoldBtn('btn-release', 'sailRelease');
+
+tackBtn.addEventListener('click', () => startSpecialMove('tack'));
+gybeBtn.addEventListener('click', () => startSpecialMove('gybe'));
+
+/**
+ * 更新処理
+ */
+function update() {
+    // 自動旋回
+    if (boat.autoRotateDir !== 0) {
+        boat.angle += boat.rotationSpeed * boat.autoRotateDir;
+        if (Math.abs(boat.angle - boat.autoRotateTarget) < 0.1) {
+            boat.autoRotateDir = 0;
+        }
+    }
+
+    // 手動旋回
+    if (input.left) boat.angle -= boat.rotationSpeed;
+    if (input.right) boat.angle += boat.rotationSpeed;
+
+    // 風との角度計算
+    let diff = Math.atan2(Math.sin(boat.angle - windAngle), Math.cos(boat.angle - windAngle));
+    let absDiff = Math.abs(diff);
+
+    let windEfficiency = 0;
+    let msg = "";
+
+    // ヨットの帆走物理
+    if (absDiff > Math.PI * 0.75) {
+        windEfficiency = -0.5;
+        msg = "かぜに むかいすぎ！";
+    } else if (absDiff > Math.PI * 0.4) {
+        windEfficiency = 1.2;
+    } else if (absDiff < Math.PI * 0.15) {
+        windEfficiency = 0.7;
+    } else {
+        windEfficiency = 1.0;
+    }
+
+    // セールの貼り具合調整
+    if (input.sailActive) {
+        boat.sailTightness += 0.02;
+    }
+    if (input.sailRelease) {
+        boat.sailTightness -= 0.02;
+    }
+    boat.sailTightness = Math.max(0, Math.min(1, boat.sailTightness));
+
+    if (boat.sailTightness > 0) {
+        // セールを張っているほど加速する
+        boat.speed += 0.08 * windEfficiency * boat.sailTightness;
+        boat.speed *= 0.98; // 巡航時の自然減速
+    } else {
+        // セールを完全に閉じていると減速が早い
+        boat.speed *= 0.96;
+    }
+
+    if (boat.speed > boat.maxSpeed) boat.speed = boat.maxSpeed;
+    if (boat.speed < 0) boat.speed = 0;
+
+    boat.x += Math.cos(boat.angle) * boat.speed;
+    boat.y += Math.sin(boat.angle) * boat.speed;
+
+    // ループ
+    if (boat.x > canvas.width + 20) boat.x = -20;
+    if (boat.x < -20) boat.x = canvas.width + 20;
+    if (boat.y > canvas.height + 20) boat.y = -20;
+    if (boat.y < -20) boat.y = canvas.height + 20;
+
+    // アイテム取得
+    let dx = boat.x - star.x;
+    let dy = boat.y - star.y;
+    if (Math.sqrt(dx * dx + dy * dy) < 35) {
+        score++;
+        document.getElementById('score').innerText = score;
+        star.x = Math.random() * (canvas.width - 100) + 50;
+        star.y = Math.random() * (canvas.height - 100) + 50;
+        if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // UI更新
+    document.getElementById('speed').innerText = Math.floor(boat.speed * 5);
+    // 風との角度を表示（0:風上 〜 180:風下）
+    let angleFromUpwind = Math.abs(Math.round((Math.PI - absDiff) * 180 / Math.PI));
+    document.getElementById('wind-angle-val').innerText = angleFromUpwind;
+    document.getElementById('msg').innerText = msg;
+
+    // セールゲージの更新
+    const gaugeHeight = boat.sailTightness * 100;
+    document.getElementById('sail-gauge-fill').style.height = gaugeHeight + '%';
+
+    if (boat.sailTightness > 0.5) {
+        sailBtn.classList.add('active');
+    } else {
+        sailBtn.classList.remove('active');
+    }
+}
+
+/**
+ * 描画処理
+ */
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 波背景
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+    ctx.lineWidth = 2;
+    let time = Date.now() / 1000;
+    for (let i = -2; i < 10; i++) {
+        let yOffset = (time * 50) % 200;
+        let baseY = i * 200 + yOffset;
+        ctx.beginPath();
+        for (let x = 0; x < canvas.width + 100; x += 30) {
+            let waveY = baseY + Math.sin(x / 100 + time) * 15;
+            if (x === 0) ctx.moveTo(x, waveY);
+            else ctx.lineTo(x, waveY);
+        }
+        ctx.stroke();
+    }
+
+    // 星
+    ctx.save();
+    ctx.fillStyle = "#FFD700";
+    ctx.shadowColor = "white";
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    for (let i = 0; i < 5; i++) {
+        ctx.lineTo(star.x + Math.cos((18 + i * 72) / 180 * Math.PI) * star.size,
+            star.y + Math.sin((18 + i * 72) / 180 * Math.PI) * star.size);
+        ctx.lineTo(star.x + Math.cos((54 + i * 72) / 180 * Math.PI) * star.size / 2,
+            star.y + Math.sin((54 + i * 72) / 180 * Math.PI) * star.size / 2);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // 船体
+    ctx.save();
+    ctx.translate(boat.x, boat.y);
+    ctx.rotate(boat.angle);
+
+    ctx.fillStyle = "#F5F5F5";
+    ctx.beginPath();
+    ctx.moveTo(25, 0);
+    ctx.bezierCurveTo(10, 15, -15, 15, -20, 10);
+    ctx.lineTo(-20, -10);
+    ctx.bezierCurveTo(-15, -15, 10, -15, 25, 0);
+    ctx.fill();
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.strokeStyle = "#666";
+    ctx.beginPath(); ctx.moveTo(-5, 0); ctx.lineTo(10, 0); ctx.stroke();
+
+    // 帆（セール）
+    if (boat.sailTightness > 0 || boat.speed > 0.5) {
+        let diff = Math.atan2(Math.sin(windAngle - boat.angle), Math.cos(windAngle - boat.angle));
+        let sailAngle = diff / 2;
+        if (Math.abs(diff) > Math.PI * 0.8) sailAngle = 0;
+
+        ctx.save();
+        ctx.rotate(sailAngle);
+        // セールの張り具合（透明度）
+        ctx.globalAlpha = 0.3 + boat.sailTightness * 0.7;
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.moveTo(8, 0);
+        // セールの膨らみ具合（スピードと張り具合に連動）
+        let curveWidth = 1 + (boat.speed + 1) * boat.sailTightness;
+        ctx.quadraticCurveTo(-15, curveWidth, -25, 0);
+        ctx.lineTo(8, 0);
+        ctx.fill();
+        ctx.strokeStyle = "#ddd";
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    ctx.restore();
+}
+
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+document.getElementById('arrow').style.transform = `rotate(180deg)`;
+gameLoop();
