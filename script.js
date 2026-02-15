@@ -43,7 +43,10 @@ const boat = {
     rotationSpeed: 0.05,
     sailTightness: 0, // 0 to 1
     autoRotateDir: 0,
-    autoRotateTarget: null
+    autoRotateTarget: null,
+    heel: 0,
+    vx: 0,
+    vy: 0
 };
 
 const windAngle = Math.PI / 2; // 北風（上から下）
@@ -174,19 +177,43 @@ function update() {
     let windEfficiency = 0;
     let msg = "";
 
-    // ヨットの帆走物理
+    // ヨットの帆走物理（角度による効率とアドバイス）
+    let targetAbsDiff = Math.PI * 0.55; // 理想的な角度（アビーム付近：ダウンウィンドから約100度）
+
     if (absDiff > Math.PI * 0.75) {
+        // 風上に寄りすぎ（In Irons）
         windEfficiency = -0.5;
-        msg = "かぜに むかいすぎ！";
+        const turnDeg = Math.round((absDiff - targetAbsDiff) * 180 / Math.PI);
+        // どちらに曲がるのが早いか判断
+        if (diff < 0) {
+            msg = `かぜに むかいすぎ！ 右に ${turnDeg}度 かたむけよう ⛵`;
+        } else {
+            msg = `かぜに むかいすぎ！ 左に ${turnDeg}度 かたむけよう ⛵`;
+        }
     } else if (absDiff > Math.PI * 0.4) {
+        // ベストな風受け範囲
         windEfficiency = 1.2;
+        if (boat.sailTightness < 0.7) {
+            msg = "もっと セールを はろう！ (GO!ボタン) ⛵✨";
+        } else {
+            msg = "ぜっこうちょう！ そのまま すすもう！ 🌟";
+        }
     } else if (absDiff < Math.PI * 0.15) {
+        // 真後ろからの風（Running）
         windEfficiency = 0.7;
+        const turnDeg = Math.round((targetAbsDiff - absDiff) * 180 / Math.PI);
+        if (diff < 0) {
+            msg = `もっと スピードがでるよ！ 左に ${turnDeg}度 かたむけよう ⛵`;
+        } else {
+            msg = `もっと スピードがでるよ！ 右に ${turnDeg}度 かたむけよう ⛵`;
+        }
     } else {
+        // その他（Broad Reach / Special ranges）
         windEfficiency = 1.0;
+        msg = "いいかんじ！ セールを しっかり はろう ⛵";
     }
 
-    // セールの貼り具合調整
+    // セールの貼り具合調整（慣性計算の前に反映させる必要がある）
     if (input.sailActive) {
         boat.sailTightness += 0.02;
     }
@@ -195,20 +222,46 @@ function update() {
     }
     boat.sailTightness = Math.max(0, Math.min(1, boat.sailTightness));
 
-    if (boat.sailTightness > 0) {
-        // セールを張っているほど加速する
-        boat.speed += 0.08 * windEfficiency * boat.sailTightness;
-        boat.speed *= 0.98; // 巡航時の自然減速
-    } else {
-        // セールを完全に閉じていると減速が早い
-        boat.speed *= 0.96;
+    // --- 慣性・物理演算の更新 ---
+    // 加速度の計算 (船体の向きに働く力)
+    let accel = 0.08 * windEfficiency * boat.sailTightness;
+
+    // 船体の向きベクトル
+    let headX = Math.cos(boat.angle);
+    let headY = Math.sin(boat.angle);
+
+    // 速度ベクトルへの加速
+    boat.vx += headX * accel;
+    boat.vy += headY * accel;
+
+    // 水の抵抗 (全体的な減速)
+    let drag = (boat.sailTightness > 0) ? 0.985 : 0.96;
+    boat.vx *= drag;
+    boat.vy *= drag;
+
+    // キール効果 (船体の向きに速度ベクトルを揃えようとする物理効果)
+    // これにより旋回中に「滑り」ながらも徐々に新しい向きへ進むリアルな挙動になる
+    let currentVelspeed = Math.sqrt(boat.vx * boat.vx + boat.vy * boat.vy);
+    if (currentVelspeed > 0.01) {
+        // 0.15 はキールの「効き」具合。低いほどドリフト（滑り）が大きくなる
+        let keelEffect = 0.15;
+        // ベクトルを徐々に「船首方向」に補正する
+        boat.vx = boat.vx * (1 - keelEffect) + (headX * currentVelspeed) * keelEffect;
+        boat.vy = boat.vy * (1 - keelEffect) + (headY * currentVelspeed) * keelEffect;
     }
 
-    if (boat.speed > boat.maxSpeed) boat.speed = boat.maxSpeed;
-    if (boat.speed < 0) boat.speed = 0;
+    // スピード上限の適用
+    let finalSpeed = Math.sqrt(boat.vx * boat.vx + boat.vy * boat.vy);
+    if (finalSpeed > boat.maxSpeed) {
+        let ratio = boat.maxSpeed / finalSpeed;
+        boat.vx *= ratio;
+        boat.vy *= ratio;
+        finalSpeed = boat.maxSpeed;
+    }
+    boat.speed = finalSpeed; // UIやアニメーション描画用に保持
 
-    boat.x += Math.cos(boat.angle) * boat.speed;
-    boat.y += Math.sin(boat.angle) * boat.speed;
+    boat.x += boat.vx;
+    boat.y += boat.vy;
 
     // ループ
     if (boat.x > canvas.width + 20) boat.x = -20;
@@ -232,6 +285,9 @@ function update() {
     // 風との角度を表示（0:風上 〜 180:風下）
     let angleFromUpwind = Math.abs(Math.round((Math.PI - absDiff) * 180 / Math.PI));
     document.getElementById('wind-angle-val').innerText = angleFromUpwind;
+    // ヒール角の更新（見栄えのため、少しランダムに揺らす）
+    let heelVal = Math.round(Math.abs(boat.heel) + (Math.random() * 0.5));
+    document.getElementById('heel-angle-val').innerText = heelVal;
     document.getElementById('msg').innerText = msg;
 
     // セールゲージの更新
@@ -287,6 +343,10 @@ function draw() {
     ctx.save();
     ctx.translate(boat.x, boat.y);
     ctx.rotate(boat.angle);
+
+    // ヒール（傾き）を視覚的に表現（船体の幅を狭めることで表現）
+    let heelScale = Math.cos(boat.heel * Math.PI / 180);
+    ctx.scale(1, heelScale);
 
     ctx.fillStyle = "#F5F5F5";
     ctx.beginPath();
