@@ -140,11 +140,11 @@ function startSpecialMove(type) {
 
     if (type === 'tack') {
         // タック：風上を回る
-        boat.autoRotateDir = (diff < 0) ? 1 : -1;
+        boat.autoRotateDir = (diff < 0) ? -1 : 1;
         boat.autoRotateTarget = boat.angle + boat.autoRotateDir * Math.PI * 0.5;
     } else if (type === 'gybe') {
         // ジャイブ：風下を回る
-        boat.autoRotateDir = (diff < 0) ? -1 : 1;
+        boat.autoRotateDir = (diff < 0) ? 1 : -1;
         boat.autoRotateTarget = boat.angle + boat.autoRotateDir * Math.PI * 0.5;
     }
 }
