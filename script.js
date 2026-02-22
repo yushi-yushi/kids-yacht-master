@@ -437,7 +437,7 @@ function draw() {
     // 帆（セール）
     if (boat.sailTightness > 0 || boat.speed > 0.5) {
         let diff = Math.atan2(Math.sin(windAngle - boat.angle), Math.cos(windAngle - boat.angle));
-        let sailAngle = diff / 2;
+        let sailAngle = -diff / 2; // 風下にセールが流れるように修正
         if (Math.abs(diff) > Math.PI * 0.8) sailAngle = 0;
 
         ctx.save();
@@ -447,8 +447,9 @@ function draw() {
         ctx.fillStyle = "white";
         ctx.beginPath();
         ctx.moveTo(8, 0);
-        // セールの膨らみ具合（スピードと張り具合に連動）
-        let curveWidth = 1 + (boat.speed + 1) * boat.sailTightness;
+        // セールの膨らみ具合（スピードと張り具合に連動し、風下側に膨らむように）
+        let baseCurve = 1 + (boat.speed + 1) * boat.sailTightness;
+        let curveWidth = sailAngle < 0 ? -baseCurve : baseCurve;
         ctx.quadraticCurveTo(-15, curveWidth, -25, 0);
         ctx.lineTo(8, 0);
         ctx.fill();
