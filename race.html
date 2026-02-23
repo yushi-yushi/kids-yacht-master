@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ヨットレース・シミュレーター</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="race.css">
+</head>
+
+<body>
+
+    <div id="ui">
+        <h1>⛵ ヨットレース</h1>
+        <div class="stats-grid">
+            <p>順位: <span id="rank">-</span></p>
+            <p>スピード: <span id="speed">0</span> km/h</p>
+            <p>角度: <span id="wind-angle-val">0</span>°</p>
+            <p>かたむき: <span id="heel-angle-val">0</span>°</p>
+        </div>
+        <p id="msg"></p>
+    </div>
+
+    <!-- レース情報パネル -->
+    <div id="race-panel">
+        <div id="race-timer">タイム: <span id="race-time">00:00</span></div>
+        <div id="race-lap">マーク: <span id="race-mark">0</span> / <span id="race-mark-total">0</span></div>
+        <button id="btn-start-race" class="game-btn">レース開始！</button>
+    </div>
+
+    <!-- 順位パネル -->
+    <div id="race-standings">
+        <h3>🏁 順位</h3>
+        <ol id="standings-list"></ol>
+    </div>
+
+    <div id="wind-container">
+        <div id="wind-indicator">
+            <div id="arrow">↑</div>
+        </div>
+        <div class="label">かぜのむき</div>
+    </div>
+
+    <!-- セールゲージ -->
+    <div id="sail-gauge-container">
+        <div id="sail-gauge-label">セール</div>
+        <div id="sail-gauge-fill"></div>
+    </div>
+
+    <!-- ミニマップ -->
+    <canvas id="minimap" width="160" height="160"></canvas>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- カウントダウンオーバーレイ -->
+    <div id="countdown-overlay">
+        <div id="countdown-text"></div>
+    </div>
+
+    <!-- ゴールオーバーレイ -->
+    <div id="finish-overlay">
+        <div id="finish-content">
+            <h2 id="finish-title"></h2>
+            <div id="finish-results"></div>
+            <button id="btn-restart" class="game-btn">もう一度レース！</button>
+        </div>
+    </div>
+
+    <div id="btn-help" class="btn">？</div>
+
+    <div id="controls">
+        <div style="display:flex; flex-direction: column;">
+            <div class="special-btns">
+                <div id="btn-tack" class="btn btn-small">タック(T)</div>
+                <div id="btn-gybe" class="btn btn-small">ジャイブ(J)</div>
+            </div>
+            <div style="display:flex; gap:15px; align-items: flex-end;">
+                <div id="btn-left" class="btn">◀</div>
+                <div id="btn-right" class="btn">▶</div>
+            </div>
+        </div>
+        <div class="sail-btns">
+            <div id="btn-sail" class="btn">⛵ GO!<br><span style="font-size:10px;">(Space)</span></div>
+            <div id="btn-release" class="btn">減速<br><span style="font-size:10px;">(Down)</span></div>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+    <div id="help-modal">
+        <h2>レースのあそびかた</h2>
+        <ul>
+            <li><strong>【レース開始！】</strong>を おすと カウントダウンが はじまるよ！</li>
+            <li><strong>【GO! / Space】</strong>でセールを はるよ！</li>
+            <li><strong>【減速 / ↓】</strong>でセールを たたんで 止まるよ。</li>
+            <li><strong>【タック / T】</strong>は 風上を 通って むきを かえるよ。</li>
+            <li><strong>【ジャイブ / J】</strong>は 風下を 通って むきを かえるよ。</li>
+            <li><strong>【◀ ▶】</strong>は ハンドルを きるよ。</li>
+            <li>⛵ ブイ（しるし）を まわって ゴールを めざそう！</li>
+            <li>🗺️ 右下の ミニマップで コースを かくにんできるよ！</li>
+        </ul>
+        <button id="close-help">わかった！</button>
+    </div>
+
+    <script src="race.js"></script>
+</body>
+
+</html>

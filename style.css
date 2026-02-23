@@ -230,15 +230,16 @@ p {
 /* セール状態ゲージ */
 #sail-gauge-container {
     position: absolute;
-    right: 15px;
-    top: 70%;
-    transform: translateY(-50%);
-    width: 30px;
-    height: 150px;
+    right: 160px;
+    /* ミニマップ(140px+10px)の左側に配置 */
+    bottom: 30px;
+    width: 20px;
+    height: 125px;
+    /* 操作ボタン群の高さに合わせる */
     background: rgba(0, 0, 0, 0.3);
     border: 2px solid white;
-    border-radius: 15px;
-    padding: 5px;
+    border-radius: 10px;
+    padding: 3px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -526,9 +527,12 @@ p {
     }
 
     #sail-gauge-container {
-        right: 10px;
-        top: 65%;
-        height: 100px;
-        width: 20px;
+        right: 110px;
+        /* モバイル：ミニマップ(100px+5px)の左側 */
+        bottom: 20px;
+        height: 105px;
+        width: 15px;
+        top: auto;
+        transform: none;
     }
 }
