@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ジュニアヨットクラブ用語集</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Poppins:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 基本スタイル */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            margin: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        /* スライドのコンテナ */
+        .slide-container {
+            width: 100%;
+            max-width: 1280px;
+            aspect-ratio: 16 / 9;
+            background-color: #ffffff;
+            margin: 40px auto;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 5% 8%;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+        }
+
+        /* 装飾 */
+        .slide-container::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 6px;
+            background-color: #ff8c00;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Poppins', 'Noto Sans JP', sans-serif;
+            color: #003366;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .slide-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            border-left: 12px solid #005088;
+            padding-left: 20px;
+        }
+
+        h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: #005088;
+        }
+
+        p,
+        li {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #64748b;
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .card {
+            background-color: #f8fafc;
+            border-radius: 20px;
+            padding: 25px;
+            border-top: 8px solid #ff8c00;
+            height: 100%;
+        }
+
+        .diagram-box {
+            width: 100%;
+            height: 100%;
+            min-height: 380px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e2e8f0;
+            padding: 10px;
+        }
+
+        .star-box {
+            background-color: #003366;
+            color: white;
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .star-box .big-text {
+            font-size: 6rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .angle-tag {
+            display: inline-block;
+            background-color: #005088;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .parts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .part-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border-left: 4px solid #ff8c00;
+        }
+
+        .part-num {
+            background: #003366;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .part-text {
+            line-height: 1.2;
+        }
+
+        .part-name {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #003366;
+            display: block;
+        }
+
+        .part-desc {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+            }
+
+            .slide-container {
+                box-shadow: none;
+                margin: 0;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- スライド 1: タイトル -->
+    <div class="slide-container">
+        <div class="content-area" style="text-align: center;">
+            <i class="fa-solid fa-anchor" style="font-size: 6rem; color: #ff8c00; margin-bottom: 2rem;"></i>
+            <h1>ジュニアヨットクラブ<br>初心者用語集</h1>
+            <p class="subtitle">〜OP級で学ぶ、風とセールの基本〜</p>
+        </div>
+    </div>
+
+    <!-- スライド 2: 動作セクション -->
+    <div class="slide-container" style="background-color: #f8fafc; text-align: center;">
+        <div class="content-area">
+            <h2 style="font-size: 5rem;">PART 1<br>動作と操船</h2>
+            <div style="width: 120px; height: 10px; background-color: #ff8c00; margin: 40px auto;"></div>
+            <p style="font-size: 2rem;">海の上での基本アクション</p>
+        </div>
+    </div>
+
+    <!-- スライド 3: ヒールとアンヒール (OP用) -->
+    <div class="slide-container">
+        <h2 class="slide-title">ヒールとアンヒール</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div class="diagram-box">
+                    <svg viewBox="0 0 440 220" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <!-- 左：ヒール -->
+                        <g transform="translate(110, 160) rotate(15) translate(0, -160)">
+                            <!-- OP船体(四角い形) -->
+                            <rect x="-30" y="160" width="60" height="20" fill="#003366" rx="2" />
+                            <!-- マストは前寄り -->
+                            <line x1="-15" y1="160" x2="-15" y2="40" stroke="#64748b" stroke-width="4" />
+                            <!-- セール(風下へ膨らむ) -->
+                            <path d="M -15 40 Q 30 100 -15 150 Z" fill="#ff8c00" opacity="0.9" />
+                            <!-- ハイクアウト -->
+                            <circle cx="-45" cy="155" r="10" fill="#334155" />
+                            <path d="M -25 160 L -45 155" stroke="#334155" stroke-width="4" />
+                        </g>
+                        <g transform="translate(110, 25)">
+                            <text text-anchor="middle" font-family="'Noto Sans JP', sans-serif">
+                                <tspan x="0" dy="0" font-size="16" font-weight="bold" fill="#003366">ヒール</tspan>
+                                <tspan x="0" dy="16" font-size="10" font-weight="bold" fill="#64748b">(ハイクアウトで抑える)</tspan>
+                            </text>
+                        </g>
+
+                        <!-- 右：アンヒール -->
+                        <g transform="translate(330, 160) rotate(-10) translate(0, -160)">
+                            <rect x="-30" y="160" width="60" height="20" fill="#003366" rx="2" />
+                            <line x1="-15" y1="160" x2="-15" y2="40" stroke="#64748b" stroke-width="4" />
+                            <path d="M -15 40 Q 25 100 -15 150 Z" fill="#ff8c00" opacity="0.9" />
+                            <!-- 乗り手は風上(左)へ -->
+                            <circle cx="-10" cy="150" r="10" fill="#334155" />
+                        </g>
+                        <g transform="translate(330, 25)">
+                            <text text-anchor="middle" font-family="'Noto Sans JP', sans-serif">
+                                <tspan x="0" dy="0" font-size="16" font-weight="bold" fill="#003366">アンヒール</tspan>
+                                <tspan x="0" dy="16" font-size="10" font-weight="bold" fill="#64748b">(風上へ傾ける)</tspan>
+                            </text>
+                        </g>
+                        <line x1="20" y1="180" x2="420" y2="180" stroke="#005088" stroke-width="2"
+                            stroke-dasharray="8,4" />
+                    </svg>
+                </div>
+                <div>
+                    <h3>フラットを保つ</h3>
+                    <p><strong>ヒール：</strong>風に押されて風下（セールの開く方）に傾くこと。</p>
+                    <p><strong>アンヒール：</strong>体を風上に入れてわざと傾けること。微風でセールを重力で広げるために行います。</p>
+                    <div
+                        style="margin-top: 30px; padding: 20px; background-color: #fff7ed; border-radius: 15px; border: 2px solid #ffedd5;">
+                        <p style="font-weight: bold; color: #9a3412; margin: 0; font-size: 1.3rem;">💡
+                            OP級のコツ：お尻の位置をこまめに動かそう！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド 4: 風とコースセクション -->
+    <div class="slide-container" style="background-color: #f8fafc; text-align: center;">
+        <div class="content-area">
+            <h2 style="font-size: 5rem;">PART 2<br>帆走コースと角度</h2>
+            <div style="width: 120px; height: 10px; background-color: #ff8c00; margin: 40px auto;"></div>
+            <p style="font-size: 2rem;">風との角度でセールの開き方は決まる</p>
+        </div>
+    </div>
+
+    <!-- スライド 5: 帆走コース (アビームのセール修正) -->
+    <div class="slide-container">
+        <h2 class="slide-title">帆走コースの種類</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div class="card">
+                        <span class="angle-tag">風上から約45度</span>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 4px;">クローズホールド</h3>
+                        <p style="font-size: 1.1rem; margin: 0;">最も風上に近いコース。セールをセンターラインまでしっかり引き込む！</p>
+                    </div>
+                    <div class="card">
+                        <span class="angle-tag">風上から90度</span>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 4px;">アビーム</h3>
+                        <p style="font-size: 1.1rem; margin: 0;">風を真横から受ける。セールを45度くらいまで出す。一番スピードが出る！</p>
+                    </div>
+                    <div class="card">
+                        <span class="angle-tag">風上から180度</span>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 4px;">ランニング</h3>
+                        <p style="font-size: 1.1rem; margin: 0;">真後ろからの風。セールを船体と直角（90度）まで全開にする。</p>
+                    </div>
+                </div>
+                <div class="diagram-box">
+                    <!-- viewBoxの横幅を広げ、中心(130)を左に寄せて右側のテキスト(クローズ・アビーム)を見切れにくくしました -->
+                    <svg viewBox="-30 0 420 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <!-- 風 -->
+                        <g transform="translate(130, 40)">
+                            <line x1="0" y1="0" x2="0" y2="35" stroke="#94a3b8" stroke-width="6" />
+                            <polygon points="-10,30 10,30 0,45" fill="#94a3b8" />
+                            <text x="0" y="-10" font-size="16" text-anchor="middle" fill="#64748b" font-weight="bold">風
+                                (WIND)</text>
+                        </g>
+
+                        <!-- 中心の回転点 -->
+                        <circle cx="130" cy="220" r="3" fill="#cbd5e1" />
+
+                        <!-- クローズ (45度) -->
+                        <g transform="translate(130, 220) rotate(45) translate(0, -90)">
+                            <!-- 船体（選手イラストの尖った形状） -->
+                            <path d="M 0 -25 L 12 15 L -12 15 Z" fill="#003366" />
+                            <circle cx="0" cy="-5" r="2.5" fill="#64748b" />
+                            <!-- セール（引き込み：風を逃がさないしなり） -->
+                            <path d="M 0 -5 Q 4 5 1 15" stroke="#ff8c00" stroke-width="6" stroke-linecap="round" fill="none" />
+                            <g transform="translate(35, 5) rotate(-45)">
+                                <text x="0" y="0" font-size="14" fill="#003366" font-weight="bold">クローズ</text>
+                            </g>
+                        </g>
+
+                        <!-- アビーム (90度) -->
+                        <g transform="translate(130, 220) rotate(90) translate(0, -115)">
+                            <path d="M 0 -25 L 12 15 L -12 15 Z" fill="#003366" />
+                            <circle cx="0" cy="-5" r="2.5" fill="#64748b" />
+                            <!-- セール（修正：風下側＝外側に自然に膨らむ曲線） -->
+                            <!-- Qの制御点を調整して、船体の中心から外側に弧を描くように変更 -->
+                            <path d="M 0 -5 Q 12 5 25 15" stroke="#ff8c00" stroke-width="6" stroke-linecap="round" fill="none" />
+                            <g transform="translate(45, 0) rotate(-90)">
+                                <text x="0" y="0" font-size="14" fill="#003366" font-weight="bold" text-anchor="middle">アビーム</text>
+                            </g>
+                        </g>
+
+                        <!-- ランニング (180度) -->
+                        <g transform="translate(130, 220) rotate(180) translate(0, -90)">
+                            <path d="M 0 -25 L 12 15 L -12 15 Z" fill="#003366" />
+                            <circle cx="0" cy="-5" r="2.5" fill="#64748b" />
+                            <!-- セール（真横に全開） -->
+                            <path d="M 0 -5 L 30 -5" stroke="#ff8c00" stroke-width="6" stroke-linecap="round" fill="none" />
+                            <g transform="translate(0, 45) rotate(-180)">
+                                <text x="0" y="0" font-size="14" fill="#003366" font-weight="bold" text-anchor="middle">ランニング</text>
+                            </g>
+                        </g>
+
+                        <!-- 軌道ガイドライン -->
+                        <path d="M 130 220 L 205 145" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4" />
+                        <path d="M 130 220 L 250 220" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4" />
+                        <path d="M 130 220 L 130 310" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド 6: 優先権 -->
+    <div class="slide-container">
+        <h2 class="slide-title">右優先のルール</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div class="star-box">
+                    <span style="font-size: 1.5rem; letter-spacing: 5px;">優先権あり</span>
+                    <span class="big-text">STAR</span>
+                </div>
+                <div>
+                    <h3>スターボード優先</h3>
+                    <p><strong>スターボード：</strong>右から風を受けている船。セールが「左側」に開いている状態です。</p>
+                    <p><strong>ポート：</strong>左から風を受けている船。セールが「右側」に開いている状態です。</p>
+                    <p style="color: #ff8c00; font-weight: bold; margin-top: 30px;">相手のブームの向きを見て判断しよう！</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド 7: パーツ名称 (OP専用) -->
+    <div class="slide-container">
+        <h2 class="slide-title">OP級の各部名称</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 15px;">艇体と装飾の名称</h3>
+                    <div class="parts-grid">
+                        <div class="part-item">
+                            <div class="part-num">1</div>
+                            <div class="part-text"><span class="part-name">バウ (艇首)</span><span class="part-desc">前方の平らな面</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">7</div>
+                            <div class="part-text"><span class="part-name">メインシート</span><span class="part-desc">帆を操るロープ</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">2</div>
+                            <div class="part-text"><span class="part-name">スタン (艇尾)</span><span class="part-desc">後方の面。舵がある</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">8</div>
+                            <div class="part-text"><span class="part-name">セール</span><span class="part-desc">風を受ける帆</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">3</div>
+                            <div class="part-text"><span class="part-name">センターボード</span><span class="part-desc">横流れを防ぐ板</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">9</div>
+                            <div class="part-text"><span class="part-name">スプリット</span><span class="part-desc">帆を斜めに張る棒</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">4</div>
+                            <div class="part-text"><span class="part-name">ガンネル</span><span class="part-desc">船の縁（ふち）</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">10</div>
+                            <div class="part-text"><span class="part-name">ブーム</span><span class="part-desc">帆の下側の横棒</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">5</div>
+                            <div class="part-text"><span class="part-name">ラダー (舵)</span><span class="part-desc">水中で向きを変える板</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">11</div>
+                            <div class="part-text"><span class="part-name">マスト</span><span class="part-desc">帆を支える垂直の棒</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">6</div>
+                            <div class="part-text"><span class="part-name">ティラー</span><span class="part-desc">舵を操る手元の棒</span></div>
+                        </div>
+                        <div class="part-item">
+                            <div class="part-num">12</div>
+                            <div class="part-text"><span class="part-name">バテン</span><span class="part-desc">帆の形を整える板</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="diagram-box">
+                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <defs>
+                            <filter id="partShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+                                <feOffset dx="1" dy="1" result="offsetblur" />
+                                <feComponentTransfer>
+                                    <feFuncA type="linear" slope="0.2" />
+                                </feComponentTransfer>
+                                <feMerge>
+                                    <feMergeNode />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                            <linearGradient id="sailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ff9d00;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ff6a00;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- 水面 -->
+                        <ellipse cx="200" cy="350" rx="180" ry="20" fill="#f0f9ff" opacity="0.6" />
+                        
+                        <!-- 艇体 - 横から見たパース (バウが左、スタンが右) -->
+                        <!-- 1. 艇体の側面 (左舷) -->
+                        <path d="M 60 280 L 320 310 L 320 360 L 70 330 Z" fill="#f8fafc" stroke="#64748b" stroke-width="0.5" />
+                        <!-- 2. スタン端面 (後部) -->
+                        <path d="M 320 310 L 360 290 L 360 340 L 320 360 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="0.5" />
+                        <!-- 3. デッキ上部・ガンネル (赤色の縁) -->
+                        <path d="M 60 280 L 100 260 L 360 290 L 320 310 Z" fill="#ffffff" stroke="#eb636b" stroke-width="2.5" />
+                        
+                        <!-- 内部の浮力体 (buoyancy bags) -->
+                        <ellipse cx="140" cy="300" rx="25" ry="10" fill="#cbd5e1" opacity="0.4" transform="rotate(-5, 140, 300)" />
+                        <ellipse cx="240" cy="315" rx="30" ry="12" fill="#cbd5e1" opacity="0.4" transform="rotate(-5, 240, 315)" />
+                        
+                        <!-- 11 マスト -->
+                        <line x1="90" y1="265" x2="90" y2="40" stroke="#334155" stroke-width="6" stroke-linecap="round" />
+                        
+                        <!-- 8 セール -->
+                        <path d="M 90 50 L 330 90 L 330 280 L 90 285 Z" fill="url(#sailGradient)" filter="url(#partShadow)" />
+                        <!-- セールの 'Q' ロゴ -->
+                        <text x="140" y="110" font-family="Poppins, sans-serif" font-size="24" font-weight="bold" fill="white" opacity="0.5" transform="rotate(10, 140, 110)">Q</text>
+                        
+                        <!-- 12 バテン -->
+                        <line x1="260" y1="160" x2="330" y2="175" stroke="#ffffff" stroke-width="2" opacity="0.6" />
+                        <line x1="260" y1="210" x2="330" y2="225" stroke="#ffffff" stroke-width="2" opacity="0.6" />
+                        
+                        <!-- 9 スプリット -->
+                        <line x1="90" y1="275" x2="340" y2="70" stroke="#475569" stroke-width="3" stroke-linecap="round" />
+                        
+                        <!-- 10 ブーム -->
+                        <line x1="90" y1="290" x2="335" y2="285" stroke="#475569" stroke-width="4" stroke-linecap="round" />
+
+                        <!-- 3 センターボード -->
+                        <path d="M 190 295 L 205 300 L 205 360 L 190 355 Z" fill="#64748b" />
+                        
+                        <!-- 5 ラダー -->
+                        <path d="M 360 300 L 375 295 L 375 365 L 360 375 Z" fill="#64748b" />
+                        <!-- 6 ティラー -->
+                        <line x1="240" y1="295" x2="365" y2="305" stroke="#1e293b" stroke-width="5" stroke-linecap="round" />
+                        
+                        <!-- 7 メインシート -->
+                        <path d="M 230 295 L 260 310 L 260 330" fill="none" stroke="#64748b" stroke-width="2" />
+
+                        <!-- ラベル番号 -->
+                        <g font-family="Poppins, sans-serif" font-size="12" font-weight="bold" fill="white">
+                            <!-- 1 バウ -->
+                            <circle cx="50" cy="285" r="11" fill="#ff8c00" />
+                            <text x="50" y="289" text-anchor="middle">1</text>
+                            <!-- 2 スタン -->
+                            <circle cx="345" cy="345" r="11" fill="#ff8c00" />
+                            <text x="345" y="349" text-anchor="middle">2</text>
+                            <!-- 3 センターボード -->
+                            <circle cx="180" cy="275" r="11" fill="#ff8c00" />
+                            <text x="180" y="279" text-anchor="middle">3</text>
+                            <!-- 4 ガンネル -->
+                            <circle cx="150" cy="335" r="11" fill="#ff8c00" />
+                            <text x="150" y="339" text-anchor="middle">4</text>
+                            <!-- 5 ラダー -->
+                            <circle cx="380" cy="355" r="11" fill="#ff8c00" />
+                            <text x="380" y="359" text-anchor="middle">5</text>
+                            <!-- 6 ティラー -->
+                            <circle cx="300" cy="275" r="11" fill="#ff8c00" />
+                            <text x="300" y="279" text-anchor="middle">6</text>
+                            <!-- 7 メインシート -->
+                            <circle cx="260" cy="335" r="11" fill="#005088" />
+                            <text x="260" y="339" text-anchor="middle">7</text>
+                            <!-- 8 セール -->
+                            <circle cx="210" cy="180" r="11" fill="#005088" />
+                            <text x="210" y="184" text-anchor="middle">8</text>
+                            <!-- 9 スプリット -->
+                            <circle cx="170" cy="70" r="11" fill="#005088" />
+                            <text x="170" y="74" text-anchor="middle">9</text>
+                            <!-- 10 ブーム -->
+                            <circle cx="240" cy="295" r="11" fill="#005088" />
+                            <text x="240" y="299" text-anchor="middle">10</text>
+                            <!-- 11 マスト -->
+                            <circle cx="70" cy="90" r="11" fill="#005088" />
+                            <text x="70" y="94" text-anchor="middle">11</text>
+                            <!-- 12 バテン -->
+                            <circle cx="360" cy="200" r="11" fill="#005088" />
+                            <text x="360" y="204" text-anchor="middle">12</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
